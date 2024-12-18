@@ -1,4 +1,5 @@
 import { ReactNode } from 'react'
+import {Menu} from 'components/layout/menu'
 
 interface LayoutProps {
     titulo?: string; 
@@ -6,10 +7,10 @@ interface LayoutProps {
     mensagens?: Array<string>;
 }
 
-const Layout: React.FC<LayoutProps> = (props: LayoutProps) =>{
+export const Layout: React.FC<LayoutProps> = (props: LayoutProps) =>{
     return (<div className="app">
         <section className="main-content columns is-fullheight">
-            {/* menu*/}
+            <Menu/>
             <div className="container column is-10">
                     <div className="section">
                         <div className="card">
@@ -34,5 +35,3 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) =>{
         </section>
     </div>)
 }
-
-export default Layout;
