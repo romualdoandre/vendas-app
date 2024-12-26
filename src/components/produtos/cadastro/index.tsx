@@ -1,5 +1,6 @@
 import { Layout } from 'components'
-import {useState} from 'react'
+import { useState } from 'react'
+import { Input } from 'components'
 
 export const CadastroProdutos: React.FC = () => {
 
@@ -8,7 +9,7 @@ export const CadastroProdutos: React.FC = () => {
     const [nome, setNome] = useState('')
     const [descricao, setDescricao] = useState('')
 
-    const submit = () =>{
+    const submit = () => {
         const produto = {
             sku,
             preco,
@@ -21,48 +22,11 @@ export const CadastroProdutos: React.FC = () => {
     return (
         <Layout titulo='Produtos'>
             <div className='columns'>
-                <div className='column is-half'>
-                    <div className='field'>
-                        <label className='label' htmlFor='inputSku'>SKU: *</label>
-                        <div className='control'>
-                            <input className='input'
-                                id='inputSku'
-                                placeholder='Digite o SKU do produto'
-                                value={sku}
-                                onChange={evt=>setSku(evt.target.value)}>
-                            </input>
-                        </div>
-
-                    </div>
-                </div>
-                <div className='column is-half'>
-                    <div className='field'>
-                        <label className='label' htmlFor='inputPreco'>Preço: *</label>
-                        <div className='control'>
-                            <input className='input'
-                                id='inputPreco'
-                                placeholder='Digite o preço do produto'
-                                value={preco}
-                                onChange={evt=>setPreco(evt.target.value)}>
-                            </input>
-                        </div>
-
-                    </div>
-                </div>
+                <Input label='SKU: *' value={sku} onChange={setSku} id='inputSku' columnClasses='is-half' placeholder='Digite o SKU do produto'></Input>
+                <Input label='Preço: *' value={preco} onChange={setPreco} id='inputPreco' columnClasses='is-half' placeholder='Digite o preço do produto'></Input>
             </div>
             <div className='columns'>
-                <div className='field column'>
-                    <label className='label' htmlFor='inputNome'>Nome: *</label>
-                    <div className='control'>
-                        <input className='input'
-                            id='inputNome'
-                            placeholder='Digite o nome do produto'
-                            value={nome}
-                            onChange={evt=>setNome(evt.target.value)}>
-                        </input>
-                    </div>
-
-                </div>
+                <Input label='Nome: *' value={nome} onChange={setNome} id='inputNome' placeholder='Digite o nome do produto'></Input>
             </div>
             <div className='columns'>
                 <div className='field column'>
@@ -72,7 +36,7 @@ export const CadastroProdutos: React.FC = () => {
                             id='inputDescricao'
                             placeholder='Digite a descrição do produto'
                             value={descricao}
-                            onChange={evt=>setDescricao(evt.target.value)}>
+                            onChange={evt => setDescricao(evt.target.value)}>
                         </textarea>
                     </div>
 
