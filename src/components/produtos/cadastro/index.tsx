@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Input } from 'components'
 import { useProdutoService } from 'app/services'
 import { Produto } from 'app/models/produtos'
+import { converterEmBigDecimal } from 'app/util/money'
 
 export const CadastroProdutos: React.FC = () => {
 
@@ -16,16 +17,24 @@ export const CadastroProdutos: React.FC = () => {
 
     const submit = () => {
         const produto: Produto = {
+            id,
             sku,
-            preco: parseFloat(preco),
+            preco: converterEmBigDecimal(preco),
             nome,
             descricao
         }
-        service.salvar(produto).then((produtoResposta)=>{
-            setId(produtoResposta.id)
-            setCadastro(produtoResposta.cadastro)    
+        if(id){
+            service.atualizar(produto).then(response =>{
+                console.log("atualizado")
+            })
         }
-        )
+        else{
+            service.salvar(produto).then((produtoResposta)=>{
+                setId(produtoResposta.id)
+                setCadastro(produtoResposta.cadastro)    
+            }
+            )
+        }
     }
 
     return (
@@ -49,7 +58,7 @@ export const CadastroProdutos: React.FC = () => {
             }
             <div className='columns'>
                 <Input label='SKU: *' value={sku} onChange={setSku} id='inputSku' columnClasses='is-half' placeholder='Digite o SKU do produto'></Input>
-                <Input label='Preço: *' value={preco} onChange={setPreco} id='inputPreco' columnClasses='is-half' placeholder='Digite o preço do produto'></Input>
+                <Input label='Preço: *' value={preco} onChange={setPreco} id='inputPreco' columnClasses='is-half' placeholder='Digite o preço do produto' currency maxLength={16}></Input>
             </div>
             <div className='columns'>
                 <Input label='Nome: *' value={nome} onChange={setNome} id='inputNome' placeholder='Digite o nome do produto'></Input>

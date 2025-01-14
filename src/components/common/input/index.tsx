@@ -1,4 +1,5 @@
 import { InputHTMLAttributes } from "react";
+import {converterEmBigDecimal, formatReal} from 'app/util/money';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     onChange?: (value: any) => void;
@@ -6,9 +7,19 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     value: string;
     id: string;
     columnClasses?: string;
+    currency?: boolean;
 }
 
-export const Input: React.FC<InputProps> = ({onChange, label, value, id, columnClasses, ...inputProps}: InputProps)=>{
+export const Input: React.FC<InputProps> = ({onChange, label, value, id, columnClasses, currency, ...inputProps}: InputProps)=>{
+
+    const onInputChange = (evt)=>{
+        let value = evt.target.value
+        if(value && currency){
+            value = formatReal(value)
+        }
+        if(onChange)
+            onChange(value)
+        }
 
     return (<div className={`field column ${columnClasses}`}>
         <label className='label' htmlFor={id}>{label}</label>
@@ -17,7 +28,7 @@ export const Input: React.FC<InputProps> = ({onChange, label, value, id, columnC
                 id={id}
                 {...inputProps}
                 value={value}
-                onChange={evt => {if(onChange) onChange(evt.target.value)}}>
+                onChange={onInputChange}>
             </input>
         </div>
     </div>)
