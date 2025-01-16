@@ -7,6 +7,7 @@ import { converterEmBigDecimal } from 'app/util/money'
 import { Alert } from 'components/common/message'
 import { useRouter } from 'next/router'
 import * as yup from 'yup'
+import Link from 'next/link'
 
 const msgCampoObrigatorio ="Campo Obrigatório";
 
@@ -141,7 +142,9 @@ export const CadastroProdutos: React.FC = () => {
                         <button className='button is-link' onClick={submit}>{ id ? 'Atualizar': 'Salvar'}</button>
                     </div>
                     <div className='control'>
-                        <button className='button is-link is-light'>Cancelar</button>
+                        <Link href="/consultas/produtos">
+                        <button className='button is-link is-light'>Voltar</button>
+                        </Link>
                     </div>
                 </div>
             </div>
