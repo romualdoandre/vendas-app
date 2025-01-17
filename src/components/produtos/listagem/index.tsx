@@ -18,6 +18,7 @@ export const ListagemProdutos: React.FC = () => {
                     ('/api/produtos', url => httpClient.get(url) )
 
     const [ lista, setLista ] = useState<Produto[]>([])
+    const [ messages, setMessages ] = useState<Array<Alert>>([])
     const service = useProdutoService()
     useEffect( () => {
         setLista(result?.data || [])
@@ -29,10 +30,16 @@ export const ListagemProdutos: React.FC = () => {
     }
 
     const deletar = (produto: Produto) => {
-        console.log(produto)
+        service.deletar(produto.id).then(response => {
+            setMessages([
+                {  tipo: "success", texto: "Produto excluido com sucesso!" }
+            ])
+            const listaAlterada: Produto[] = lista?.filter( p => p.id !== produto.id )
+            setLista(listaAlterada)
+        })
     }
 
-    return (<Layout titulo='Produtos'>
+    return (<Layout titulo='Produtos' mensagens={messages}>
         <Link href="/cadastros/produtos">
             <button className='button is-warning'>Novo</button>
         </Link>
