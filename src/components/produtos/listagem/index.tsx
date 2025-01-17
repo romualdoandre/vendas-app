@@ -10,7 +10,7 @@ import { useState } from 'react'
 import { Alert } from 'components/common/message'
 import { useProdutoService } from 'app/services';
 import { Loader } from 'components/common';
-
+import Router from 'next/router'
 
 
 export const ListagemProdutos: React.FC = () => {
@@ -23,11 +23,20 @@ export const ListagemProdutos: React.FC = () => {
         setLista(result?.data || [])
     }, [result])
 
+    const editar = (produto: Produto) => {
+        const url = `/cadastros/produtos?id=${produto.id}`
+        Router.push(url)
+    }
+
+    const deletar = (produto: Produto) => {
+        console.log(produto)
+    }
+
     return (<Layout titulo='Produtos'>
         <Link href="/cadastros/produtos">
             <button className='button is-warning'>Novo</button>
         </Link>
         <br/><Loader show={!result} />
-        <TabelaProdutos produtos={lista}></TabelaProdutos>
+        <TabelaProdutos produtos={lista} onEdit={editar} onDelete={deletar}></TabelaProdutos>
     </Layout>)
 }

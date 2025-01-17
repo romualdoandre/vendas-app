@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { Input } from 'components'
 import { useProdutoService } from 'app/services'
 import { Produto } from 'app/models/produtos'
-import { converterEmBigDecimal } from 'app/util/money'
+import { converterEmBigDecimal, formatReal } from 'app/util/money'
 import { Alert } from 'components/common/message'
 import { useRouter } from 'next/router'
 import * as yup from 'yup'
@@ -39,7 +39,7 @@ export const CadastroProdutos: React.FC = () => {
     const router = useRouter();
     const [ errors, setErrors ] = useState<FormErros>({})
     const { id: queryId  } = router.query;
-    /*useEffect( () => {        
+    useEffect( () => {        
         if(queryId){
             service.carregarProduto(queryId).then(produtoEncontrado => {
                 setId(produtoEncontrado.id)
@@ -50,7 +50,7 @@ export const CadastroProdutos: React.FC = () => {
                 setCadastro(produtoEncontrado.cadastro || '')
             })
         } 
-    } , [ queryId ] )*/
+    } , [ queryId ] )
 
     const submit = () => {
         const produto: Produto = {
