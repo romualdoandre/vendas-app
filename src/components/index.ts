@@ -1,4 +1,4 @@
 export { Layout } from './layout'
 export {CadastroProdutos, ListagemProdutos} from './produtos'
-export {Input, Message} from './common' 
+export {Input, InputCPF, InputDate, InputMoney, InputTelefone, Message} from './common' 
 export { CadastroCliente } from './clientes'
