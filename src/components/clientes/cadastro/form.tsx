@@ -12,7 +12,7 @@ interface ClienteFormProps  {
 const formScheme: Cliente = {
     cadastro: '',
     cpf: '',
-    dataNascimento: '',
+    nascimento: '',
     email: '',
     endereco: '',
     id: '',
@@ -69,14 +69,14 @@ export const ClienteForm: React.FC<ClienteFormProps> = ({cliente, onSubmit}) =>{
                       error={formik.errors.cpf}
                       />
 
-                <InputDate id="dataNascimento" 
-                      name="dataNascimento"
+                <InputDate id="nascimento" 
+                      name="nascimento"
                       label="Data Nascimento: *"
                       autoComplete="off" 
                       columnClasses="is-half"
                       onChange={formik.handleChange} 
-                      value={formik.values.dataNascimento} 
-                      error={formik.errors.dataNascimento}
+                      value={formik.values.nascimento} 
+                      error={formik.errors.nascimento}
                       />
            </div> 
            <div className="columns">
