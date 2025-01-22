@@ -2,7 +2,7 @@ import { Cliente } from "app/models/clientes"
 import { useFormik } from "formik";
 import { Input, InputCPF, InputTelefone, InputDate } from 'components'
 import Router from "next/router";
-
+import * as Yup from 'yup'
 
 interface ClienteFormProps  {
     cliente: Cliente;
@@ -20,12 +20,25 @@ const formScheme: Cliente = {
     telefone: ''
 }
 
+const campoObrigatorioMensagem = "Campo obrigatório"
+
+const validationSchema = Yup.object().shape({
+    cpf: Yup.string().trim().required(campoObrigatorioMensagem).length(14, "CPF inválido"),
+    nascimento: Yup.string().trim().required(campoObrigatorioMensagem).length(10,"Data inválida"),
+    email: Yup.string().trim().required(campoObrigatorioMensagem).email("E-mail inválido"),
+    endereco: Yup.string().trim().required(campoObrigatorioMensagem),
+    nome: Yup.string().trim().required(campoObrigatorioMensagem),
+    telefone: Yup.string().trim().required(campoObrigatorioMensagem)
+})
+
 export const ClienteForm: React.FC<ClienteFormProps> = ({cliente, onSubmit}) =>{
     const formik = useFormik<Cliente>({
         initialValues: {...formScheme, ...cliente},
         onSubmit,
-        enableReinitialize: true
+        enableReinitialize: true,
+        validationSchema
     })
+    
     return (
         <form onSubmit={formik.handleSubmit}>
             {formik.values.id &&
