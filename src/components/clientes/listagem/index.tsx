@@ -1,6 +1,7 @@
 import { Layout } from "components"
 import { Input, InputCPF } from "components"
 import { useFormik } from "formik"
+import { Button  } from 'primereact/button'
 
 interface ConsultaClientesForm{
     nome?: string;
@@ -21,6 +22,7 @@ export const ListagemClientes: React.FC = () => {
     return (
         <Layout titulo="Clientes">
             <form onSubmit={formik.handleSubmit}>
+                <Button label="teste"></Button>
                 <div className="columns">
                     <Input label="Nome:" id="nome" name="nome"
                      value={formik.values.nome} columnClasses="is-half"
