@@ -11,7 +11,7 @@ import { Alert } from 'components/common/message'
 import { useProdutoService } from 'app/services';
 import { Loader } from 'components/common';
 import Router from 'next/router'
-
+import { ConfirmDialog } from 'primereact/confirmdialog';
 
 export const ListagemProdutos: React.FC = () => {
     const { data: result, error } = useSWR<AxiosResponse<Produto[]>>
@@ -40,6 +40,7 @@ export const ListagemProdutos: React.FC = () => {
     }
 
     return (<Layout titulo='Produtos' mensagens={messages}>
+        <ConfirmDialog/>
         <Link href="/cadastros/produtos">
             <button className='button is-warning'>Novo</button>
         </Link>

@@ -2,13 +2,13 @@ import { Cliente } from "app/models/clientes"
 import { Layout } from "components"
 import { Input, InputCPF } from "components"
 import { useFormik } from "formik"
-import { DataTable, DataTablePageParams  } from 'primereact/datatable'
-import { Column } from "primereact/column"
+import { DataTable, DataTableStateEvent  } from 'primereact/datatable'
+import { Column } from 'primereact/column'
 import { useState } from "react"
 import { Page } from "app/models/common/page"
 import { useClienteService } from "app/services"
 import { Button } from 'primereact/button'
-import Router from "next/router"
+import Router, { useRouter } from "next/router"
 import { confirmDialog, ConfirmDialog } from 'primereact/confirmdialog'
 
 interface ConsultaClientesForm{
@@ -18,6 +18,7 @@ interface ConsultaClientesForm{
 
 export const ListagemClientes: React.FC = () => {
     const service = useClienteService()
+
     const handleSubmit = (filtro: ConsultaClientesForm) =>{
         handlePage(null)
     }
@@ -29,7 +30,7 @@ export const ListagemClientes: React.FC = () => {
     const [clientes, setClientes] = useState<Page<Cliente>>({content:[], first: 0, number: 0, size: 10, totalElements: 0})
     const [ loading, setLoading ] = useState<boolean>(false) 
 
-    const handlePage = (event?: DataTablePageParams) => {
+    const handlePage = (event?: DataTableStateEvent) => {
         service.find(formik.values.nome, formik.values.cpf, event?.page, event?.rows)
         .then(result => {
             setClientes({...result, first: event?.first })
@@ -78,6 +79,11 @@ export const ListagemClientes: React.FC = () => {
                     <div className="control is-link">
                         <button type="submit" className="button is-success">
                             Consultar
+                        </button>
+                    </div>
+                    <div className="control is-link">
+                        <button type="submit" className="button is-warning" onClick={e => Router.push('/cadastros/clientes')}>
+                            Novo
                         </button>
                     </div>
                 </div>
