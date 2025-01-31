@@ -1,12 +1,15 @@
-import { Cliente } from "app/models/clientes";
+import { Cliente } from "app/models/clientes"
 import { Layout } from "components"
 import { Input, InputCPF } from "components"
 import { useFormik } from "formik"
 import { DataTable, DataTablePageParams  } from 'primereact/datatable'
-import { Column } from "primereact/column";
-import { useState } from "react";
-import { Page } from "app/models/common/page";
-import { useClienteService } from "app/services";
+import { Column } from "primereact/column"
+import { useState } from "react"
+import { Page } from "app/models/common/page"
+import { useClienteService } from "app/services"
+import { Button } from 'primereact/button'
+import Router from "next/router"
+import { confirmDialog, ConfirmDialog } from 'primereact/confirmdialog'
 
 interface ConsultaClientesForm{
     nome?: string;
@@ -34,8 +37,34 @@ export const ListagemClientes: React.FC = () => {
         .finally(()=>{setLoading(false)})
     }
 
+    const deletar = (registro: Cliente) => {
+        service.deletar(registro.id).then(()=>{
+            console.log('Deletado com sucesso')
+            handlePage(null)
+        })
+    }
+
+    const actionTemplate = (registro: Cliente) => {
+        const url = `/cadastros/clientes?id=${registro.id}`
+        return (<div>
+            <Button label="Editar" className="p-button-rounded p-button-info"
+            onClick={e => Router.push(url)}/>
+             <Button label="Deletar" onClick={() => {
+                    confirmDialog({
+                        message: "Confirma a exclusão deste registro?",
+                        acceptLabel: "Sim",
+                        rejectLabel: "Não",
+                        accept: () => deletar(registro),
+                        header: "Confirmação"
+                    });
+                }
+            } className="p-button-rounded p-button-danger"/>
+        </div>)
+    }
+
     return (
         <Layout titulo="Clientes">
+            <ConfirmDialog />
             <form onSubmit={formik.handleSubmit}>
                 <div className="columns">
                     <Input label="Nome:" id="nome" name="nome"
@@ -64,6 +93,7 @@ export const ListagemClientes: React.FC = () => {
                             <Column field="nome" header="Nome"/>
                             <Column field="cpf" header="CPF"/>
                             <Column field="email" header="Email"/>
+                            <Column body={actionTemplate}/>
                         </DataTable>
                     </div>
                 </div>
