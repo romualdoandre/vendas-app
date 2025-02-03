@@ -1,5 +1,6 @@
 import { Venda } from "app/models/vendas"
 import { Layout } from "components"
+import { VendasForm } from "./form"
 
 export const Vendas: React.FC    = () => {
 
@@ -8,7 +9,7 @@ export const Vendas: React.FC    = () => {
     }
 
     return (<Layout titulo="Venda">
-        Vendas
+        <VendasForm onSubmit={handleSubmit}/>
     </Layout>)
 }
 
