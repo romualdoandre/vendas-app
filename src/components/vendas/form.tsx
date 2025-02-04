@@ -1,13 +1,14 @@
-import { Cliente } from "app/models/clientes";
-import { Page } from "app/models/common/page";
+import { Cliente } from "app/models/clientes"
+import { Page } from "app/models/common/page"
 import { Venda } from "app/models/vendas"
-import { useClienteService, useProdutoService } from "app/services";
+import { useClienteService, useProdutoService } from "app/services"
 import { useFormik } from "formik"
 import { AutoComplete, AutoCompleteChangeEvent, AutoCompleteCompleteEvent } from "primereact/autocomplete"
-import { useState } from "react";
+import { useState } from "react"
+import { InputText } from "primereact/inputtext"
+import { Produto } from "app/models/produtos"
+import { Dialog } from 'primereact/dialog'
 import { Button } from 'primereact/button'
-import { InputText } from "primereact/inputtext";
-import { Produto } from "app/models/produtos";
 
 interface VendasFormProps {
     onSubmit: (venda: Venda) => void;
@@ -27,6 +28,7 @@ export const VendasForm: React.FC<VendasFormProps> = ({ onSubmit }) => {
 
     const [codigoProduto, setCodigoProduto] = useState('')
     const [produto, setProduto] = useState<Produto>()
+    const [mensagem, setMensagem] =  useState('')
 
     const formik = useFormik<Venda>({
         onSubmit,
@@ -54,9 +56,11 @@ export const VendasForm: React.FC<VendasFormProps> = ({ onSubmit }) => {
     }
 
     const handleCodigoProdutoSelect = (e) => {
-        produtoService.carregarProduto(e.target.value)
-        .then(produtoEncontrado => setProduto(produtoEncontrado))
-        .catch(error => console.log(error))
+        if(codigoProduto){
+            produtoService.carregarProduto(e.target.value)
+            .then(produtoEncontrado => setProduto(produtoEncontrado))
+            .catch(error => {setMensagem('Produto não encontrado')})
+        }
     }
 
     const handleAddProduto = (e) => {
@@ -65,6 +69,20 @@ export const VendasForm: React.FC<VendasFormProps> = ({ onSubmit }) => {
         produtosAdicionados?.push(produto)
         setProduto(null)
         setCodigoProduto('')
+    }
+
+    const dialogMensagemFooter = () => {
+        return (
+            <div>
+                <Button label="OK" onClick={handleFecharDialogProdutoNaoEncontrado}/>
+            </div>
+        )
+    }
+
+    const handleFecharDialogProdutoNaoEncontrado = () => {
+        setMensagem('')
+        setCodigoProduto('')
+        setProduto(null)
     }
 
     return (<form onSubmit={formik.handleSubmit}>
@@ -111,5 +129,12 @@ export const VendasForm: React.FC<VendasFormProps> = ({ onSubmit }) => {
             </div>
             <Button type="submit" label="Finalizar"/>
         </div>
+        <Dialog position="top"
+         header="Atenção"
+          visible={!!mensagem}
+           onHide={handleFecharDialogProdutoNaoEncontrado}
+           footer={dialogMensagemFooter}>
+        {mensagem}
+        </Dialog>
     </form>)
 }
