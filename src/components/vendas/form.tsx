@@ -11,6 +11,12 @@ import { Dialog } from 'primereact/dialog'
 import { Button } from 'primereact/button'
 import { DataTable } from "primereact/datatable"
 import { Column } from "primereact/column"
+import { Dropdown } from 'primereact/dropdown'
+
+const formatadorMoney = new Intl.NumberFormat('pt-BR',{
+    style: 'currency',
+    currency: 'BRL'
+})
 
 interface VendasFormProps {
     onSubmit: (venda: Venda) => void;
@@ -33,6 +39,7 @@ export const VendasForm: React.FC<VendasFormProps> = ({ onSubmit }) => {
     const [produto, setProduto] = useState<Produto>()
     const [mensagem, setMensagem] =  useState('')
     const [quantidadeProduto, setQuantidadeProduto] = useState<number>(0)
+    const formasPagamento: string[] = ["DINHEIRO","CARTAO"]
 
     const formik = useFormik<Venda>({
         onSubmit,
@@ -68,6 +75,14 @@ export const VendasForm: React.FC<VendasFormProps> = ({ onSubmit }) => {
         }
     }
 
+    const totalVenda = (): number =>{
+        const totais: number[] = formik.values.itens?.map(iv=>iv.quantidade*iv.produto.preco)
+        if(totais.length){
+            return totais.reduce((somatorioAtual=0,valorItemAtual)=>somatorioAtual+valorItemAtual)
+        }
+        else return 0
+    }
+
     const handleAddProduto = (e) => {
         const itensAdicionados = formik.values.itens
 
@@ -85,6 +100,9 @@ export const VendasForm: React.FC<VendasFormProps> = ({ onSubmit }) => {
         else {
             itensAdicionados?.push({produto, quantidade: quantidadeProduto})
         }
+
+        formik.setFieldValue('total',totalVenda())
+
         setProduto(null)
         setCodigoProduto('')
         setQuantidadeProduto(0)
@@ -98,13 +116,6 @@ export const VendasForm: React.FC<VendasFormProps> = ({ onSubmit }) => {
         }
         const produtosFiltrados = listaProdutos.filter((produto: Produto) => produto.nome?.toUpperCase().includes(nomeProduto.toUpperCase()))
         setListaFiltradaProdutos(produtosFiltrados)
-    }
-
-    const handleProdutoChange = (e: AutoCompleteChangeEvent) => {
-        const produtoSelecionado = e.value
-        if(produtoSelecionado){
-            setProduto(produtoSelecionado)
-        }
     }
 
     const dialogMensagemFooter = () => {
@@ -183,9 +194,33 @@ export const VendasForm: React.FC<VendasFormProps> = ({ onSubmit }) => {
                             <Column header="Preço Unitário" field="produto.preco"></Column>
                             <Column header="Qtd" field="quantidade"></Column>
                             <Column header="Total" body={(iv: ItemVenda)=>{
-                                return (<div>{iv.produto.preco * iv.quantidade}</div>)
+                                const total = iv.produto.preco * iv.quantidade
+                                const totalFormatado = formatadorMoney.format(total)
+                                return (<div>{totalFormatado}</div>)
                             }}></Column>
                         </DataTable>
+                    </div>
+                    <div className="p-col-5">
+                        <div className="p-field">
+                            <label htmlFor="formaPagamento">Forma de Pagamento*</label>
+                            <Dropdown id="formaPagamento"
+                            options={formasPagamento}
+                            value={formik.values.formaPagamento}
+                            onChange={e=>formik.setFieldValue('formaPagamento',e.value)}
+                            placeholder="Selecione"/>
+                        </div>
+                    </div>
+                    <div className="p-col-2">
+                        <div className="p-field">
+                            <label htmlFor="itens">Itens:</label>
+                            <InputText id="itens" name="itens" disabled value={formik.values.itens?.length}/>
+                        </div>
+                    </div>
+                    <div className="p-col-2">
+                        <div className="p-field">
+                            <label htmlFor="total">Total:</label>
+                            <InputText id="total" name="total" disabled value={formatadorMoney.format(formik.values.total)}/>
+                        </div>
                     </div>
             </div>
             <Button type="submit" label="Finalizar"/>
