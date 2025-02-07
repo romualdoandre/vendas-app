@@ -27,7 +27,8 @@ export const VendasForm: React.FC<VendasFormProps> = ({ onSubmit }) => {
 
     const clienteService = useClienteService()
     const produtoService = useProdutoService()
-
+    const [listaProdutos, setListaProdutos] = useState<Produto[]>([])
+    const [listaFiltradaProdutos, setListaFiltradaProdutos] = useState<Produto[]>([])
     const [codigoProduto, setCodigoProduto] = useState('')
     const [produto, setProduto] = useState<Produto>()
     const [mensagem, setMensagem] =  useState('')
@@ -89,6 +90,23 @@ export const VendasForm: React.FC<VendasFormProps> = ({ onSubmit }) => {
         setQuantidadeProduto(0)
     }
 
+    const handleProdutoAutocomplete = (e: AutoCompleteCompleteEvent) => {
+        const nomeProduto = e.query
+        if(!listaProdutos.length){
+            produtoService.listar()
+            .then(produtosEncontrados => setListaProdutos(produtosEncontrados))
+        }
+        const produtosFiltrados = listaProdutos.filter((produto: Produto) => produto.nome?.toUpperCase().includes(nomeProduto.toUpperCase()))
+        setListaFiltradaProdutos(produtosFiltrados)
+    }
+
+    const handleProdutoChange = (e: AutoCompleteChangeEvent) => {
+        const produtoSelecionado = e.value
+        if(produtoSelecionado){
+            setProduto(produtoSelecionado)
+        }
+    }
+
     const dialogMensagemFooter = () => {
         return (
             <div>
@@ -132,7 +150,14 @@ export const VendasForm: React.FC<VendasFormProps> = ({ onSubmit }) => {
                 </div>
                 <div className="p-col-6">
                 <AutoComplete 
-                    value={produto} field="nome"/>
+                    value={produto}
+                    suggestions={listaFiltradaProdutos}
+                    completeMethod={handleProdutoAutocomplete}
+                    field="nome"
+                    id="produto"
+                    name="produto"
+                    onChange={ (e: AutoCompleteChangeEvent) => setProduto(e.value)}
+                   />
                 </div>
                 <div className="p-col-2">
                         <span className="p-float-label">
