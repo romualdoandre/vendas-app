@@ -191,6 +191,16 @@ export const VendasForm: React.FC<VendasFormProps> = ({ onSubmit }) => {
                     </div>
                     <div className="p-col-12">
                         <DataTable value={formik.values.itens} emptyMessage="Nenhum produto adicionado.">
+                            <Column body={(item: ItemVenda)=>{
+
+                                const handleRemoverItem = () => {
+                                    const novalista = formik.values.itens?.filter((iv: ItemVenda) => iv.produto.id !== item.produto.id)
+                                    formik.setFieldValue("itens", novalista)
+                                }
+
+                                return (<Button label="Excluir" onClick={handleRemoverItem}/>)
+                            }
+                            }/>
                             <Column header="Código" field="produto.id"></Column>
                             <Column header="SKU" field="produto.sku"></Column>
                             <Column header="Produto" field="produto.nome"></Column>
