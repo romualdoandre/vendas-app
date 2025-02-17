@@ -12,6 +12,7 @@ import { Button } from 'primereact/button'
 import { DataTable } from "primereact/datatable"
 import { Column } from "primereact/column"
 import { Dropdown } from 'primereact/dropdown'
+import { validationScheme } from './validationSchema'
 
 const formatadorMoney = new Intl.NumberFormat('pt-BR',{
     style: 'currency',
@@ -43,7 +44,8 @@ export const VendasForm: React.FC<VendasFormProps> = ({ onSubmit }) => {
 
     const formik = useFormik<Venda>({
         onSubmit,
-        initialValues: formSchema
+        initialValues: formSchema,
+        validationSchema: validationScheme
     })
 
     const [listaClientes, setListaClientes] = useState<Page<Cliente>>({
@@ -148,6 +150,7 @@ export const VendasForm: React.FC<VendasFormProps> = ({ onSubmit }) => {
                  completeMethod={handleClienteAutocomplete}
                  value={formik.values.cliente}
                  field="nome"/>
+                 <small className="p-error p-d-block">{formik.errors.cliente}</small>
             </div>
             <div className="p-grid">
                 <div className="p-col-2">
@@ -199,6 +202,7 @@ export const VendasForm: React.FC<VendasFormProps> = ({ onSubmit }) => {
                                 return (<div>{totalFormatado}</div>)
                             }}></Column>
                         </DataTable>
+                        <small className="p-error p-d-block">{formik.touched && formik.errors.itens}</small>
                     </div>
                     <div className="p-col-5">
                         <div className="p-field">
@@ -208,6 +212,7 @@ export const VendasForm: React.FC<VendasFormProps> = ({ onSubmit }) => {
                             value={formik.values.formaPagamento}
                             onChange={e=>formik.setFieldValue('formaPagamento',e.value)}
                             placeholder="Selecione"/>
+                            <small className="p-error p-d-block">{formik.touched && formik.errors.formaPagamento}</small>
                         </div>
                     </div>
                     <div className="p-col-2">
