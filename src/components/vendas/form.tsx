@@ -21,6 +21,8 @@ const formatadorMoney = new Intl.NumberFormat('pt-BR',{
 
 interface VendasFormProps {
     onSubmit: (venda: Venda) => void;
+    onNovaVenda: () => void;
+    vendaRealizada: boolean;
 }
 
 const formSchema: Venda = {
@@ -30,7 +32,9 @@ const formSchema: Venda = {
     formaPagamento: ''
 }
 
-export const VendasForm: React.FC<VendasFormProps> = ({ onSubmit }) => {
+export const VendasForm: React.FC<VendasFormProps> = ({ onSubmit,
+    onNovaVenda,
+    vendaRealizada }) => {
 
     const clienteService = useClienteService()
     const produtoService = useProdutoService()
