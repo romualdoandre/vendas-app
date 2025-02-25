@@ -143,6 +143,13 @@ export const VendasForm: React.FC<VendasFormProps> = ({ onSubmit,
         return !produto || !quantidadeProduto
     }
 
+    const realizarNovaVenda = () =>{
+        onNovaVenda()
+        formik.resetForm()
+        formik.setFieldValue('itens',[])
+        formik.setFieldTouched('itens',false)
+    }
+
     return (<form onSubmit={formik.handleSubmit}>
         <div className="p-fluid">
             <div className="p-field">
@@ -242,7 +249,10 @@ export const VendasForm: React.FC<VendasFormProps> = ({ onSubmit,
                         </div>
                     </div>
             </div>
-            <Button type="submit" label="Finalizar"/>
+            {!vendaRealizada && <Button type="submit" label="Finalizar"/>}
+            {vendaRealizada &&
+             <Button type="button" label="Nova Venda" className="p-button-success"
+             onClick={realizarNovaVenda}/>}
         </div>
         <Dialog position="top"
          header="Atenção"
