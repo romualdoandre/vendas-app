@@ -4,3 +4,4 @@ export {Input, InputCPF, InputDate, InputMoney, InputTelefone, Message} from './
 export { CadastroCliente, ListagemClientes } from './clientes'
 export { Vendas } from './vendas'
 export {RelatorioVendas} from './relatorios'
+export { Dashboard } from './dashboard'
