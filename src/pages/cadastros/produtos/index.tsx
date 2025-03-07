@@ -1,3 +1,8 @@
-import {CadastroProdutos} from 'components'
+import { CadastroProdutos } from 'components'
+import { RotaAutenticada } from 'components'
 
-export default CadastroProdutos
+export default function () {
+    return (<RotaAutenticada>
+        <CadastroProdutos />
+    </RotaAutenticada>)
+} 
