@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { signOut }from 'next-auth/client'
 
 export const Menu: React.FC = () => {
     return (
@@ -11,7 +12,7 @@ export const Menu: React.FC = () => {
                 <MenuItem href='/vendas/nova-venda' label='Vendas'/>
                 <MenuItem href='/vendas/relatorio-vendas' label='Relatório de Vendas'/>
                 <MenuItem href='/' label='Config'/>
-                <MenuItem href='/' label='Sair'/>
+                <MenuItem href='/' onClick={()=>signOut()} label='Sair'/>
                 </ul>
         </aside>
     )
