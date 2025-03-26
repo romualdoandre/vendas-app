@@ -6,8 +6,6 @@ export default NextAuth({
     callbacks: {
         // Getting the JWT token from API response
         async jwt(token, user) {
-            //console.log('callback jwt')
-            //console.table(user)
             if (user) {
                 token.accessToken = user.token
             }
@@ -16,8 +14,6 @@ export default NextAuth({
         },
 
         async session(session, token) {
-            //console.log('callbacks session')
-            //console.table(token)
             session.accessToken = token.accessToken
             return session
         }
@@ -37,8 +33,6 @@ export default NextAuth({
                 // Add logic here to look up the user from the credentials supplied
                 try {
                     const user = await useUsuarioService().autenticar(credentials)
-                   // console.log('authorize')
-                    //console.table(user)
                     if (user) {
                         // Any object returned will be saved in `user` property of the JWT
                         return user
