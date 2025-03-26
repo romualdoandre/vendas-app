@@ -7,7 +7,7 @@ import { Alert } from 'components/common/message'
 import * as yup from 'yup'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-
+import { useSession} from 'next-auth/client'
 
 const msgCampoObrigatorio ="Campo Obrigatório";
 
@@ -39,10 +39,16 @@ export const CadastroProdutos: React.FC = () => {
     const [ errors, setErrors ] = useState<FormErros>({})
     const router = useRouter();
     const { id: queryId  } = router.query;
-
+    const [session] = useSession()
+    const token = session.accessToken
+    const options = {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }
     useEffect( () => {        
         if(queryId){
-            service.carregarProduto(queryId).then(produtoEncontrado => {
+            service.carregarProduto(queryId, options).then(produtoEncontrado => {
                 setId(produtoEncontrado.id)
                 setSku(produtoEncontrado.sku)
                 setNome(produtoEncontrado.nome)
@@ -51,7 +57,7 @@ export const CadastroProdutos: React.FC = () => {
                 setCadastro(produtoEncontrado.cadastro || '')
             })
         } 
-    } , [ queryId ] )
+    } , [ queryId, options ] )
 
     const submit = () => {
         const produto: Produto = {
@@ -67,7 +73,7 @@ export const CadastroProdutos: React.FC = () => {
 
             if(id){
                 service
-                    .atualizar(produto)
+                    .atualizar(produto, options)
                     .then(response => {
                         setMessages([{
                             tipo: "success", texto: "Produto atualizado com sucesso!"
@@ -76,7 +82,7 @@ export const CadastroProdutos: React.FC = () => {
             }else{
                 
                 service
-                    .salvar(produto)
+                    .salvar(produto, options)
                     .then(produtoResposta => {
                         setId(produtoResposta.id)
                         setCadastro(produtoResposta.cadastro)

@@ -3,6 +3,7 @@ import { Layout, Dashboard } from 'components'
 import { useDashboardService } from 'app/services'
 import { DashboardData } from 'app/models/dashboard'
 import { RotaAutenticada } from 'components'
+import { signOut} from 'next-auth/client'
 
 interface HomeProps{
     dashboard: DashboardData
@@ -25,6 +26,7 @@ const Home: React.FC<HomeProps> = (props: HomeProps) => {
 
 export async function getStaticProps(context: any) {
     const service = useDashboardService()
+
     const dashboard: DashboardData= await service.get() 
     return {
         props: {
